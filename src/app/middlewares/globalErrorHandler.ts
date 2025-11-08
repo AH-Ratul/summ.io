@@ -1,4 +1,5 @@
 import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
+import { Prisma } from "../../../generated/prisma";
 
 export const globalErrorHandler: ErrorRequestHandler = (
   err: any,
@@ -8,6 +9,13 @@ export const globalErrorHandler: ErrorRequestHandler = (
 ) => {
   let statusCode = err.statusCode || 500;
   let message = err.message || "Internal Server Error";
+
+  // validation error
+  if (err instanceof Prisma.PrismaClientValidationError) {
+    if (err.name === "PrismaClientValidationError") {
+      (statusCode = 400), (message = "Invalid Data Format");
+    }
+  }
 
   res.status(statusCode).json({
     success: false,
