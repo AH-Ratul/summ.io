@@ -27,14 +27,15 @@ const getUser = catchAsync(async (req: Request, res: Response) => {
 
 const deleteUser = catchAsync(async (req: Request, res: Response) => {
   const { userId } = req.params;
+  const parseId = parseInt(userId as unknown as string);
 
-  const result = await UserService.deleteUser(userId as unknown as number);
+  await UserService.deleteUser(parseId);
 
   sendResponse(res, {
     success: true,
     statusCode: 200,
     message: "User Deleted",
-    data: result,
+    data: null,
   });
 });
 
