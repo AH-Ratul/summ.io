@@ -36,7 +36,7 @@ const deleteUser = async (userId: number) => {
     where: { id: userId },
   });
 
-  if (isUserExist) {
+  if (!isUserExist) {
     throw new AppError(404, "user not found");
   }
 
