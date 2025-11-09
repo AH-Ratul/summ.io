@@ -3,6 +3,8 @@ import { prisma } from "../../config/db";
 import AppError from "../../helpers/AppError";
 import bcrypt from "bcryptjs";
 import { createToken } from "../../utils/tokens";
+import { JwtPayload } from "jsonwebtoken";
+import { envConfig } from "../../config";
 
 const credentialsLogin = async (
   payload: Partial<Prisma.UserWhereUniqueInput>
@@ -38,9 +40,36 @@ const credentialsLogin = async (
   };
 };
 
-const logout = async () => {};
+const changePassword = async (
+  oldPassword: string,
+  newPassword: string,
+  decodedToken: JwtPayload
+) => {
+  const user = await prisma.user.findUnique({ where: { id: decodedToken.id } });
+
+  const isOldPassMatched = bcrypt.compare(
+    oldPassword,
+    user?.password as string
+  );
+
+  if (!isOldPassMatched) {
+    throw new AppError(400, "Old password doesn't match");
+  }
+
+  const hashedPassword = await bcrypt.hash(
+    newPassword as string,
+    Number(envConfig.SALT)
+  );
+
+  const updatedUser = await prisma.user.update({
+    where: { id: decodedToken.id },
+    data: { password: hashedPassword },
+  });
+
+  return updatedUser;
+};
 
 export const AuthService = {
   credentialsLogin,
-  logout,
+  changePassword,
 };
