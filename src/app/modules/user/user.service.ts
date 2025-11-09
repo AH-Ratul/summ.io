@@ -31,7 +31,7 @@ const getUser = async () => {
   return users;
 };
 
-const deleteUser = async (userId: number) => {
+const deleteUser = async (userId: string) => {
   const isUserExist = await prisma.user.findUnique({
     where: { id: userId },
   });
