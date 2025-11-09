@@ -1,0 +1,8 @@
+model Product {
+    id           String   @id @default(uuid())
+    product_name String
+    category     String
+    price        Float
+    stock        Int
+    createdAt    DateTime @default(now())
+}
