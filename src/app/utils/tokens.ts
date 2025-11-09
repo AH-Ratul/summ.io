@@ -6,6 +6,7 @@ export const createToken = (user: Partial<Prisma.UserWhereUniqueInput>) => {
   const jwtPayload = {
     id: user.id,
     email: user.email,
+    role: user.role,
   };
 
   const accessToken = generateToken(
