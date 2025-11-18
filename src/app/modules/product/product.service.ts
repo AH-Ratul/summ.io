@@ -9,7 +9,11 @@ const createProduct = async (payload: Prisma.ProductCreateInput) => {
 };
 
 const getAllProduct = async () => {
-  const product = await prisma.product.findMany();
+  const product = await prisma.product.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 
   return product;
 };
