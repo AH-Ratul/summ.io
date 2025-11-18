@@ -4,6 +4,7 @@ import sendResponse from "../../utils/sendResponse";
 import { AuthService } from "./auth.service";
 import { setAuthCookie } from "../../utils/setCookie";
 import { JwtPayload } from "jsonwebtoken";
+import { envConfig } from "../../config";
 
 const credentialsLogin = catchAsync(async (req: Request, res: Response) => {
   const result = await AuthService.credentialsLogin(req.body);
@@ -22,13 +23,13 @@ const logout = catchAsync(async (req: Request, res: Response) => {
   res.clearCookie("accessToken", {
     httpOnly: true,
     secure: false,
-    sameSite: "none",
+    sameSite: envConfig.NODE_ENV === "production" ? "none" : "lax",
   });
 
   res.clearCookie("refreshToken", {
     httpOnly: true,
     secure: false,
-    sameSite: "none",
+    sameSite: envConfig.NODE_ENV === "production" ? "none" : "lax",
   });
 
   sendResponse(res, {
@@ -61,5 +62,5 @@ const changePassword = catchAsync(async (req: Request, res: Response) => {
 export const AuthController = {
   credentialsLogin,
   logout,
-  changePassword
+  changePassword,
 };
