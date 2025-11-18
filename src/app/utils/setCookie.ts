@@ -1,4 +1,5 @@
 import { Response } from "express";
+import { envConfig } from "../config";
 
 interface ITokens {
   accessToken?: string;
@@ -8,17 +9,17 @@ interface ITokens {
 export const setAuthCookie = (res: Response, tokens: ITokens) => {
   if (tokens.accessToken) {
     res.cookie("accessToken", tokens.accessToken, {
-      httpOnly: true,
+      httpOnly: envConfig.NODE_ENV === "production",
       secure: true,
-      sameSite: "none",
+      sameSite: envConfig.NODE_ENV === "production" ? "none" : "lax",
     });
   }
 
   if (tokens.refreshToken) {
     res.cookie("refreshToken", tokens.refreshToken, {
-      httpOnly: true,
+      httpOnly: envConfig.NODE_ENV === "production",
       secure: true,
-      sameSite: "none",
+      sameSite: envConfig.NODE_ENV === "production" ? "none" : "lax",
     });
   }
 };
