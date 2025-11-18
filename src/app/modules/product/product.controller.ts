@@ -34,7 +34,7 @@ const updateProduct = catchAsync(async (req: Request, res: Response) => {
   );
 
   sendResponse(res, {
-    statusCode: 200,
+    statusCode: 201,
     success: true,
     message: "Product Updated Successfully",
     data: result,
@@ -46,9 +46,9 @@ const deleteProduct = catchAsync(async (req: Request, res: Response) => {
   await ProductService.deleteProduct(productId as string);
 
   sendResponse(res, {
-    statusCode: 201,
+    statusCode: 200,
     success: true,
-    message: "Product Successfully Deleted",
+    message: "Product Deleted",
     data: null,
   });
 });
