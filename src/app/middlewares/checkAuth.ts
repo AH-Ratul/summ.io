@@ -31,7 +31,7 @@ export const checkAuth =
       }
 
       if (!authRoles.includes(verifiedToken.role)) {
-        throw new AppError(403, "You are not permitted to access the route");
+        throw new AppError(403, "Permission Denied. You are not authorized.");
       }
 
       req.user = verifiedToken;
