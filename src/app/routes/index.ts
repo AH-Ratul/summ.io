@@ -2,6 +2,7 @@ import { Router } from "express";
 import { userRouter } from "../modules/user/user.route";
 import { authRoute } from "../modules/auth/auth.route";
 import { productRoute } from "../modules/product/product.route";
+import { salesRouter } from "../modules/sales/sales.route";
 
 type TRoute = {
   path: string;
@@ -22,6 +23,10 @@ const moduleRoutes: TRoute[] = [
   {
     path: "/product",
     route: productRoute,
+  },
+  {
+    path: "/sales",
+    route: salesRouter,
   },
 ];
 
