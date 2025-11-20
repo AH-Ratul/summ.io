@@ -8,8 +8,14 @@ const createProduct = async (payload: Prisma.ProductCreateInput) => {
   return product;
 };
 
-const getAllProduct = async () => {
+const getAllProduct = async (query: any) => {
   const product = await prisma.product.findMany({
+    where: {
+      product_name: {
+        contains: query.search,
+        mode: "insensitive",
+      },
+    },
     orderBy: {
       createdAt: "desc",
     },
