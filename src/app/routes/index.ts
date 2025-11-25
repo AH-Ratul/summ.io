@@ -3,6 +3,7 @@ import { userRouter } from "../modules/user/user.route";
 import { authRoute } from "../modules/auth/auth.route";
 import { productRoute } from "../modules/product/product.route";
 import { salesRouter } from "../modules/sales/sales.route";
+import { categoryRouter } from "../modules/category/category.route";
 
 type TRoute = {
   path: string;
@@ -27,6 +28,10 @@ const moduleRoutes: TRoute[] = [
   {
     path: "/sales",
     route: salesRouter,
+  },
+  {
+    path: "/category",
+    route: categoryRouter,
   },
 ];
 
