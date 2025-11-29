@@ -38,7 +38,7 @@ const createSales = async (payload: Prisma.SalesUncheckedCreateInput) => {
 
   await prisma.product.update<Prisma.ProductUpdateArgs>({
     where: {
-      id: product?.id,
+      id: product?.id!,
     },
     data: {
       stock: updatedStock,
@@ -49,7 +49,7 @@ const createSales = async (payload: Prisma.SalesUncheckedCreateInput) => {
 };
 
 const getSales = async () => {
-  const allSales = await prisma.sales.findMany({
+  const allSales = await prisma.sales.findMany<Prisma.SalesFindManyArgs>({
     orderBy: {
       createdAt: "desc",
     },
