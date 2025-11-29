@@ -53,12 +53,16 @@ model Sales {
 model Category {
   id   String @id @default(uuid())
   name String
+
+  Expense Expense[]
 }
 
 model Expense {
   id       String   @id @default(uuid())
   title    String
-  category String
+  categoryId String
   amount   Float
   date     DateTime
+
+  category Category @relation(fields: [categoryId], references: [id])
 }
