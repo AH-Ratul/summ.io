@@ -17,6 +17,23 @@ export const globalErrorHandler: ErrorRequestHandler = (
     }
   }
 
+  if (err instanceof Prisma.PrismaClientKnownRequestError) {
+    switch (err.code) {
+      case "P2003": {
+        const f = err.meta?.field_name || "related field";
+        statusCode = 400;
+        message = `Invalid reference! ${f}. does not match any existing record`;
+        break;
+      }
+
+      default: {
+        statusCode = 400;
+        message = `Database error: ${err.code}`;
+        break;
+      }
+    }
+  }
+
   res.status(statusCode).json({
     success: false,
     message,
