@@ -1,4 +1,12 @@
-import { Prisma } from "../../../../generated/prisma";
+import {
+  endOfDay,
+  startOfDay,
+  startOfMonth,
+  startOfYear,
+  subDays,
+  subYears,
+} from "date-fns";
+import { Prisma, Sales } from "../../../../generated/prisma";
 import { prisma } from "../../config/db";
 import AppError from "../../helpers/AppError";
 
@@ -48,11 +56,58 @@ const createSales = async (payload: Prisma.SalesUncheckedCreateInput) => {
   return sales;
 };
 
-const getSales = async () => {
+const getSales = async (query: Record<string, any>) => {
+  const page = Number(query.page) || 1;
+  const limit = Number(query.limit) || 10;
+  const range = query.range;
+
+  const filter: Prisma.SalesWhereInput = {};
+
+  if (range && range !== "all-time") {
+    let startDate: Date | null = null;
+    let now = new Date();
+
+    switch (range) {
+      case "today":
+        startDate = startOfDay(now);
+        break;
+      case "last-7-days":
+        startDate = subDays(now, 7);
+        break;
+      case "last-15-days":
+        startDate = subDays(now, 15);
+        break;
+      case "last-30-days":
+        startDate = subDays(now, 30);
+        break;
+      case "this-month":
+        startDate = startOfMonth(now);
+        break;
+      case "this-year":
+        startDate = startOfYear(now);
+        break;
+      case "last-year":
+        startDate = subYears(now, 1);
+        break;
+      default:
+        startDate = null;
+    }
+
+    if (startDate) {
+      filter.createdAt = {
+        gte: startDate,
+        lt: endOfDay(now),
+      };
+    }
+  }
+
   const allSales = await prisma.sales.findMany<Prisma.SalesFindManyArgs>({
+    where: filter,
     orderBy: {
       createdAt: "desc",
     },
+    skip: (page - 1) * limit,
+    take: limit,
     include: {
       product: {
         select: {
@@ -70,7 +125,11 @@ const getSales = async () => {
     },
   });
 
-  return allSales;
+  const totalCount = await prisma.sales.count({ where: filter });
+
+  const totalPage = Math.ceil(totalCount / limit);
+
+  return { page, limit, totalPage, allSales };
 };
 
 export const SalesService = {
