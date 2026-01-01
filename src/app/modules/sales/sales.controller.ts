@@ -15,7 +15,8 @@ const createSales = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getSales = catchAsync(async (req: Request, res: Response) => {
-  const result = await SalesService.getSales();
+  const query = req.query;
+  const result = await SalesService.getSales(query as Record<string, any>);
 
   sendResponse(res, {
     statusCode: 200,
