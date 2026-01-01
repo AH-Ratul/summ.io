@@ -21,12 +21,9 @@ const addExpense = async (payload: Prisma.ExpenseUncheckedCreateInput) => {
 const getExpense = async (query: Record<string, any>) => {
   const page = Number(query.page) || 1;
   const limit = Number(query.limit) || 10;
-  const range = query.range || "all-time";
+  const range = query.range || "";
   const searchQ = query.search || "";
   const cat = query.category || "";
-
-  // const targetYear = Number(query.year);
-  // const targetMonth = Number(query.month);
 
   const filter: Prisma.ExpenseWhereInput = {};
 
@@ -36,19 +33,7 @@ const getExpense = async (query: Record<string, any>) => {
     };
   }
 
-  // if (targetYear && targetMonth) {
-  //   const startDate = new Date(
-  //     Date.UTC(targetYear, targetMonth - 1, 1, 0, 0, 0)
-  //   );
-  //   const endDate = new Date(Date.UTC(targetYear, targetMonth, 1, 0, 0, 0));
-
-  //   filter.date = {
-  //     gte: startDate,
-  //     lt: endDate,
-  //   };
-  // }
-
-  if (range) {
+  if (range && range !== "all-time") {
     let startDate: Date | null = null;
     let now = new Date();
 
@@ -86,10 +71,12 @@ const getExpense = async (query: Record<string, any>) => {
     }
   }
 
-  filter.title = {
-    contains: searchQ,
-    mode: "insensitive",
-  };
+  if (searchQ) {
+    filter.title = {
+      contains: searchQ,
+      mode: "insensitive",
+    };
+  }
 
   const expenses = await prisma.expense.findMany<Prisma.ExpenseFindManyArgs>({
     where: filter,
@@ -107,7 +94,7 @@ const getExpense = async (query: Record<string, any>) => {
     },
   });
 
-  const totalCount = await prisma.expense.count();
+  const totalCount = await prisma.expense.count({ where: filter });
 
   const totalPage = Math.ceil(totalCount / limit);
 
