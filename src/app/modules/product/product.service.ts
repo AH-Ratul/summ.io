@@ -9,19 +9,33 @@ const createProduct = async (payload: Prisma.ProductCreateInput) => {
 };
 
 const getAllProduct = async (query: any) => {
+  const page = Number(query.page) || 1;
+  const limit = Number(query.limit) || 10;
+  const search = query.search || "";
+
+  const filter: Prisma.ProductWhereInput = {};
+
+  if (search) {
+    filter.product_name = {
+      contains: search,
+      mode: "insensitive",
+    };
+  }
+
   const product = await prisma.product.findMany({
-    where: {
-      product_name: {
-        contains: query.search,
-        mode: "insensitive",
-      },
-    },
+    where: filter,
+    skip: (page - 1) * limit,
+    take: limit,
     orderBy: {
       createdAt: "desc",
     },
   });
 
-  return product;
+  const totalCount = await prisma.product.count();
+
+  const totalPage = Math.ceil(totalCount / limit);
+
+  return { page, limit, totalPage, product };
 };
 
 const updateProduct = async (
