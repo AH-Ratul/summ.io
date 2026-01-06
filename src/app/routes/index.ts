@@ -5,6 +5,7 @@ import { productRoute } from "../modules/product/product.route";
 import { salesRouter } from "../modules/sales/sales.route";
 import { categoryRouter } from "../modules/category/category.route";
 import { expenseRouter } from "../modules/expense/expense.route";
+import { metaRoute } from "../modules/meta/meta.route";
 
 type TRoute = {
   path: string;
@@ -37,6 +38,10 @@ const moduleRoutes: TRoute[] = [
   {
     path: "/expense",
     route: expenseRouter,
+  },
+  {
+    path: "/metadata",
+    route: metaRoute,
   },
 ];
 
