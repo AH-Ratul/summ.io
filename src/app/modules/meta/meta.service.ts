@@ -23,7 +23,7 @@ const getDashboardMetaData = async () => {
 };
 
 const getBarChartData = async () => {
-  const salesData =
+  const salesData: any =
     await prisma.$queryRaw`SELECT extract(MONTH from "createdAt") as month_idx,
         DATE_TRUNC('month',"createdAt") as month,
         sum(total) as t 
@@ -32,7 +32,7 @@ const getBarChartData = async () => {
         order by month_idx asc
     `;
 
-  const expenseData =
+  const expenseData: any =
     await prisma.$queryRaw`SELECT extract(MONTH from "date") as month_idx,
         DATE_TRUNC('month',"date") as month,
         sum(amount) as t 
@@ -40,7 +40,33 @@ const getBarChartData = async () => {
         group by month_idx, month
         order by month_idx asc`;
 
-  return { salesData, expenseData };
+  const mergedData: any = {};
+
+  salesData.forEach((item: any) => {
+    if (!mergedData[item.month_idx]) {
+      mergedData[item.month_idx] = {
+        name: item.month_idx,
+        sales: 0,
+        expense: 0,
+      };
+    }
+    mergedData[item.month_idx].sales = item.t;
+  });
+
+  expenseData.forEach((item: any) => {
+    if (!mergedData[item.month_idx]) {
+      mergedData[item.month_idx] = {
+        name: item.month_idx,
+        sales: 0,
+        expense: 0,
+      };
+    }
+    mergedData[item.month_idx].expense = item.t;
+  });
+
+  const chartdata = Object.values(mergedData);
+
+  return { chartdata };
 };
 
 export const MetaServices = {
