@@ -35,7 +35,7 @@ const getExpense = async (query: Record<string, any>) => {
 
   if (range && range !== "all-time") {
     let startDate: Date | null = null;
-    let now = new Date();
+    const now = new Date();
 
     switch (range) {
       case "today":
