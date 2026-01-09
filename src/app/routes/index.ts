@@ -7,14 +7,14 @@ import { categoryRouter } from "../modules/category/category.route";
 import { expenseRouter } from "../modules/expense/expense.route";
 import { metaRoute } from "../modules/meta/meta.route";
 
-type TRoute = {
+interface IRoute {
   path: string;
   route: Router;
-};
+}
 
 const appRouter: Router = Router();
 
-const moduleRoutes: TRoute[] = [
+const moduleRoutes: IRoute[] = [
   {
     path: "/user",
     route: userRouter,
