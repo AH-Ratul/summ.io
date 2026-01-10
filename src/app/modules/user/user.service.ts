@@ -31,6 +31,18 @@ const getUser = async () => {
   return users;
 };
 
+const getMe = async (id: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id },
+  });
+
+  if (user) {
+    const { password, ...userWithoutPassword } = user;
+    return {
+      user: userWithoutPassword,
+    };
+  }
+};
 const deleteUser = async (userId: string) => {
   const isUserExist = await prisma.user.findUnique({
     where: { id: userId },
@@ -50,5 +62,6 @@ const deleteUser = async (userId: string) => {
 export const UserService = {
   createUser,
   getUser,
+  getMe,
   deleteUser,
 };
