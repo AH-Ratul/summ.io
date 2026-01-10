@@ -6,6 +6,8 @@ interface EnvConfig {
   PORT: string;
   NODE_ENV: "development" | "production";
   SALT: string;
+  SUPER_ADMIN_EMAIL: string;
+  SUPER_ADMIN_PASSWORD: string;
   JWT: {
     ACCESS_SECRET: string;
     ACCESS_EXPIRES: string;
@@ -19,6 +21,8 @@ const loadEnvironments = (): EnvConfig => {
     "PORT",
     "NODE_ENV",
     "SALT",
+    "SUPER_ADMIN_EMAIL",
+    "SUPER_ADMIN_PASSWORD",
     "ACCESS_SECRET",
     "ACCESS_EXPIRES",
     "REFRESH_SECRET",
@@ -35,6 +39,8 @@ const loadEnvironments = (): EnvConfig => {
     PORT: process.env.PORT as string,
     NODE_ENV: process.env.NODE_ENV as "development" | "production",
     SALT: process.env.SALT as string,
+    SUPER_ADMIN_EMAIL: process.env.SUPER_ADMIN_EMAIL as string,
+    SUPER_ADMIN_PASSWORD: process.env.SUPER_ADMIN_PASSWORD as string,
     JWT: {
       ACCESS_SECRET: process.env.ACCESS_SECRET as string,
       ACCESS_EXPIRES: process.env.ACCESS_EXPIRES as string,
