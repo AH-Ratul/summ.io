@@ -13,7 +13,10 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: (origin, callback) => {
-      const originUri = ["http://localhost:3000"];
+      const originUri = [
+        "http://localhost:3000",
+        "https://summ-io.vercel.app",
+      ];
       if (!origin || originUri.includes(origin)) {
         callback(null, true);
       } else {
