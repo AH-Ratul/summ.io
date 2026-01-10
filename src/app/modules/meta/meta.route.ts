@@ -7,12 +7,12 @@ export const metaRoute: Router = Router();
 
 metaRoute.get(
   "/",
-  checkAuth(Role.ADMIN, Role.STAFF),
+  checkAuth(Role.SUPER_ADMIN, Role.STAFF),
   MetaController.getDashboardMetaData
 );
 
 metaRoute.get(
   "/barchart",
-  checkAuth(Role.ADMIN, Role.STAFF),
+  checkAuth(Role.SUPER_ADMIN, Role.STAFF),
   MetaController.getBarChartData
 );

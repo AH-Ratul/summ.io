@@ -5,15 +5,15 @@ import { ExpenseController } from "./expense.controller";
 
 export const expenseRouter: Router = Router();
 
-expenseRouter.get("/", checkAuth(Role.ADMIN), ExpenseController.getExpense);
+expenseRouter.get("/", checkAuth(Role.SUPER_ADMIN), ExpenseController.getExpense);
 
 expenseRouter.post(
   "/addExpense",
-  checkAuth(Role.ADMIN),
+  checkAuth(Role.SUPER_ADMIN),
   ExpenseController.addExpense
 );
 
 expenseRouter
   .route("/:id")
-  .patch(checkAuth(Role.ADMIN), ExpenseController.updateExpense)
-  .delete(checkAuth(Role.ADMIN), ExpenseController.deleteExpense);
+  .patch(checkAuth(Role.SUPER_ADMIN), ExpenseController.updateExpense)
+  .delete(checkAuth(Role.SUPER_ADMIN), ExpenseController.deleteExpense);

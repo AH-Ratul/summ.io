@@ -5,15 +5,15 @@ import { CategoryController } from "./category.controller";
 
 export const categoryRouter: Router = Router();
 
-categoryRouter.get("/", checkAuth(Role.ADMIN), CategoryController.getCategory);
+categoryRouter.get("/", checkAuth(Role.SUPER_ADMIN), CategoryController.getCategory);
 
 categoryRouter.post(
   "/add", 
-  checkAuth(Role.ADMIN),
+  checkAuth(Role.SUPER_ADMIN),
   CategoryController.addCategory
 );
 
 categoryRouter
   .route("/:id")
-  .patch(checkAuth(Role.ADMIN), CategoryController.updateCategory)
-  .delete(checkAuth(Role.ADMIN), CategoryController.deleteCategory);
+  .patch(checkAuth(Role.SUPER_ADMIN), CategoryController.updateCategory)
+  .delete(checkAuth(Role.SUPER_ADMIN), CategoryController.deleteCategory);
