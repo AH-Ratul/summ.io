@@ -9,11 +9,11 @@ productRoute.get("/", ProductController.getAllProduct);
 productRoute.post("/create", ProductController.createProduct);
 productRoute.patch(
   "/:productId",
-  checkAuth(Role.ADMIN),
+  checkAuth(Role.SUPER_ADMIN),
   ProductController.updateProduct
 );
 productRoute.delete(
   "/:productId",
-  checkAuth(Role.ADMIN),
+  checkAuth(Role.SUPER_ADMIN),
   ProductController.deleteProduct
 );
